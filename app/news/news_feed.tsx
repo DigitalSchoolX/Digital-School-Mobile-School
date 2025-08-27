@@ -15,6 +15,7 @@ import {
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import MenuDropdown from "../../components/MenuDropdown";
 import {
+  favoriteNews,
   getAllNews,
   getFavoriteNews,
   getNewsBySubject,
@@ -259,7 +260,7 @@ export default function NewsFeedScreen() {
           })
         );
       } else {
-        // await favoriteNews(id); // This line was removed
+        await favoriteNews(id);
         // Cập nhật UI sau khi API thành công
         setNewsList((prev) =>
           prev.map((n) => {

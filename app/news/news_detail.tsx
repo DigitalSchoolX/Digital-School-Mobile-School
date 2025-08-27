@@ -62,12 +62,25 @@ export default function NewsDetailScreen() {
           for (const subject of subjects) {
             const storedNews = await AsyncStorage.getItem(`${tab}-${subject}`);
             if (storedNews) {
-              const parsedNews = JSON.parse(storedNews);
-              const found = parsedNews.find((item: any) => item._id === id || item.id === id);
-              if (found) {
-                foundNews = found;
-                console.log('🚀 Found news in storage, displaying immediately');
-                break;
+              try {
+                const parsedNews = JSON.parse(storedNews);
+                // Kiểm tra xem parsedNews có phải là mảng không
+                if (Array.isArray(parsedNews)) {
+                  const found = parsedNews.find((item: any) => item._id === id || item.id === id);
+                  if (found) {
+                    foundNews = found;
+                    console.log('🚀 Found news in storage, displaying immediately');
+                    break;
+                  }
+                } else {
+                  console.warn(`Stored data for ${tab}-${subject} is not an array:`, parsedNews);
+                  // Xóa dữ liệu không hợp lệ
+                  await AsyncStorage.removeItem(`${tab}-${subject}`);
+                }
+              } catch (parseError) {
+                console.warn('Error parsing stored news:', parseError);
+                // Xóa dữ liệu không hợp lệ
+                await AsyncStorage.removeItem(`${tab}-${subject}`);
               }
             }
           }

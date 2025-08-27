@@ -142,6 +142,7 @@ export default function NotificationDetailScreen() {
       }
       router.back();
     } catch (err: any) {
+      console.log("err", err.response.data.message);
       alert("Có lỗi xảy ra khi chấp nhận: " + (err?.message || err));
     }
     setLoading(false);
